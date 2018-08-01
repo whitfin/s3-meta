@@ -3,6 +3,14 @@ name = "s3-meta"
 version = "0.1.0"
 authors = ["Isaac Whitfield <iw@whitfin.io>"]
 description = "Gather metadata about your S3 buckets"
+repository = "https://github.com/whitfin/s3-meta"
+keywords = ["aws", "amazon", "s3", "statistics"]
+categories = ["command-line-utilities", "filesystem", "visualization"]
+readme = "README.md"
+license = "MIT"
+
+[badges]
+travis-ci = { repository = "whitfin/s3-meta" }
 
 [dependencies]
 humantime = "1.1"
