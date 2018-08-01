@@ -1,0 +1,15 @@
+[package]
+name = "s3-meta"
+version = "0.1.0"
+authors = ["Isaac Whitfield <iw@whitfin.io>"]
+description = "Gather metadata about your S3 buckets"
+
+[dependencies]
+humantime = "1.1"
+pretty-bytes = "0.2"
+tokio-core = "0.1"
+
+# AWS/S3 libraries
+rusoto_core = "0.32"
+rusoto_credential = "0.11"
+rusoto_s3 = "0.32"
