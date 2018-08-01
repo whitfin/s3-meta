@@ -8,6 +8,8 @@ extern crate tokio_core;
 use rusoto_core::{reactor::RequestDispatcher, region::Region};
 use rusoto_credential::ChainProvider;
 use rusoto_s3::{ListObjectsV2Request, S3, S3Client};
+use std::collections::HashMap;
+use std::path::Path;
 use std::time::{Duration, SystemTime};
 use tokio_core::reactor::Core;
 
@@ -37,6 +39,9 @@ fn main() {
         ChainProvider::new(&core.handle()),
         Region::default(),
     );
+
+    // file extensions tracking
+    let mut extensions: HashMap<String, u64> = HashMap::new();
 
     // bounds for tracking modification timestamps
     let mut latest_file = Bounded::new("".to_string());
@@ -80,6 +85,13 @@ fn main() {
                 // apply any bounded updates for the file size and modified stamp
                 bounded::apply(&mut earliest_file, &mut latest_file, &key, &modified);
                 bounded::apply(&mut smallest_file, &mut largest_file, &key, &size);
+
+                // grab the file extensions and increment
+                if let Some(ext) = Path::new(&key).extension() {
+                    *extensions
+                        .entry(ext.to_string_lossy().into_owned())
+                        .or_insert(0) += 1;
+                }
 
                 // increment the total size
                 total_size += size as u64;
@@ -133,6 +145,19 @@ fn main() {
         util::log_pair("smallest_file_size", util::convert_bytes(size));
         util::log_pair("smallest_file_bytes", size);
     });
+
+    // find the most frequent extension
+    let prevalent_extension = extensions
+        .iter()
+        .max_by(|(_, left), (_, right)| left.cmp(right))
+        .map(|(key, _)| key);
+
+    // next segment: extensions
+    util::log_head("extensions");
+    util::log_pair("unique_extensions", extensions.len());
+    if let Some(ext) = prevalent_extension {
+        util::log_pair("most_frequent_extension", ext);
+    }
 
     // next segment: modification
     util::log_head("modification");
