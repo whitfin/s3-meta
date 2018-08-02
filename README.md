@@ -37,6 +37,8 @@ $ AWS_ACCESS_KEY_ID=MY_ACCESS_KEY_ID \
     s3-meta my.bucket.name/my/directory/path
 ```
 
+Don't forget to add a space to the start of your command if you're going to inline your credentials as above!
+
 ## Output
 
 Output is pretty straightforward, and follows a relatively simple format which is easily extensible, and hopefully convenient in shell pipelines. There may be changes made to this format to make it easier to consume (spaces placed to make splitting easier, unformatted numbers, etc).
