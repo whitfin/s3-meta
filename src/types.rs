@@ -38,6 +38,8 @@ impl From<ListObjectsV2Error> for MetaError {
         // grab the raw conversion
         let msg = err.to_string();
 
+        println!("{}", msg);
+
         // XML, look for a message!
         if msg.starts_with("<?xml") {
             // create an XML reader and buffer
@@ -88,3 +90,29 @@ derive_from!(&'a str);
 derive_from!(io::Error);
 derive_from!(time::SystemTimeError);
 derive_from!(String);
+
+#[cfg(test)]
+mod tests {
+    use super::MetaError;
+    use rusoto_credential::CredentialsError;
+    use rusoto_s3::ListObjectsV2Error;
+
+    #[test]
+    fn converting_rusoto_to_meta() {
+        let message = "My fake access key failed message".to_string();
+        let xml_err = format!(
+            r#"<?xml version="1.0" encoding="UTF-8"?>
+                <Error>
+                    <Code>InvalidAccessKeyId</Code>
+                    <Message>{}</Message>
+                </Error>"#,
+            message
+        );
+
+        let creds_err = CredentialsError::new(xml_err);
+        let lists_err = ListObjectsV2Error::Credentials(creds_err);
+        let converted = MetaError::from(lists_err);
+
+        assert_eq!(converted.0, message);
+    }
+}
