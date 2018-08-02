@@ -38,3 +38,23 @@ pub fn chain() -> Vec<Box<Metric>> {
         Box::new(Modification::new()),
     ]
 }
+
+/// Retrieves the key of an `Object` as a `&String`.
+pub(in metrics) fn get_key(object: &Object) -> &str {
+    &*unwrap_opt(&object.key, "objects should have a key")
+}
+
+/// Retrieves the modification time of an `Object` as a `&String`.
+pub(in metrics) fn get_modified(object: &Object) -> &String {
+    unwrap_opt(&object.last_modified, "objects should have a modified date")
+}
+
+/// Retrieves the size of an `Object` as a `u64`.
+pub(in metrics) fn get_size(object: &Object) -> u64 {
+    *unwrap_opt(&object.size, "objects should have a size") as u64
+}
+
+/// Unwraps an `Option` as a reference using an `expect` label.
+fn unwrap_opt<'a, V>(opt: &'a Option<V>, expect: &str) -> &'a V {
+    opt.as_ref().expect(expect)
+}

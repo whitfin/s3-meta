@@ -1,5 +1,6 @@
 extern crate humantime;
 extern crate pretty_bytes;
+extern crate quick_xml;
 extern crate rusoto_core;
 extern crate rusoto_credential;
 extern crate rusoto_s3;
@@ -12,11 +13,17 @@ use tokio_core::reactor::Core;
 
 mod bounded;
 mod metrics;
+mod types;
 mod util;
 
-fn main() {
-    // grab the root path of the S3 location to use and split
-    let root_paths = std::env::args().skip(1).next().unwrap();
+fn main() -> types::MetaResult<()> {
+    // grab the root path of the S3 location to use
+    let root_paths = std::env::args()
+        .skip(1)
+        .next()
+        .ok_or_else(|| "Bucket name not provided")?;
+
+    // split the path up to a (bucket, prefix)
     let mut splitn = root_paths.splitn(2, '/');
 
     // bucket is required, prefix is optional after `/`
@@ -24,7 +31,7 @@ fn main() {
     let prefix = splitn.next().map(|s| s.to_string());
 
     // asynchronous core for rusoto
-    let core = Core::new().unwrap();
+    let core = Core::new()?;
 
     // construct new S3 client
     let s3 = S3Client::new(
@@ -49,7 +56,7 @@ fn main() {
         };
 
         // execute the request and await the response (blocking)
-        let response = s3.list_objects_v2(&request).sync().unwrap();
+        let response = s3.list_objects_v2(&request).sync()?;
 
         // check contents (although should always be there)
         if let Some(contents) = response.contents {
@@ -75,4 +82,7 @@ fn main() {
     for metric in &chain {
         metric.print();
     }
+
+    // done
+    Ok(())
 }

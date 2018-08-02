@@ -23,7 +23,7 @@ impl Metric for Extensions {
     /// Registers an S3 `Object` with this metric struct.
     fn register(&mut self, object: &Object) {
         // grab the file extensions and increment
-        if let Some(ext) = Path::new(object.key.as_ref().unwrap()).extension() {
+        if let Some(ext) = Path::new(super::get_key(object)).extension() {
             *self.extensions
                 .entry(ext.to_string_lossy().into_owned())
                 .or_insert(0) += 1;

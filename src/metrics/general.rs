@@ -26,7 +26,7 @@ impl Metric for General {
     /// Registers an S3 `Object` with this metric struct.
     fn register(&mut self, object: &Object) {
         self.total_keys += 1;
-        self.total_size += object.size.unwrap() as u64;
+        self.total_size += super::get_size(object);
     }
 
     /// Prints out all internal statistics under the `general` header.

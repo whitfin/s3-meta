@@ -25,8 +25,8 @@ impl Metric for Modification {
         ::bounded::apply(
             &mut self.earliest_file,
             &mut self.latest_file,
-            object.key.as_ref().unwrap(),
-            object.last_modified.as_ref().unwrap(),
+            super::get_key(object),
+            super::get_modified(object),
         );
     }
 

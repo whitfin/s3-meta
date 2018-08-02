@@ -27,7 +27,7 @@ impl Metric for FileSize {
     /// Registers an S3 `Object` with this metric struct.
     fn register(&mut self, object: &Object) {
         // pull various metadata
-        let size = object.size.unwrap() as u64;
+        let size = super::get_size(object);
 
         // count another key total
         self.total_keys += 1;
@@ -37,7 +37,7 @@ impl Metric for FileSize {
         ::bounded::apply(
             &mut self.smallest_file,
             &mut self.largest_file,
-            object.key.as_ref().unwrap(),
+            super::get_key(object),
             &size,
         );
     }
