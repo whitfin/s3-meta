@@ -42,7 +42,7 @@ where
     }
 
     let bounded_val = bounded.value().clone();
-    let bounded_cnt = bounded.count();
+    let bounded_cnt = bounded.count() as u64;
 
     let key = bounded_key.unwrap();
 
@@ -50,7 +50,7 @@ where
     log_pair(&format!("{}_name", label), key);
 
     if bounded_cnt > 1 {
-        log_pair(&format!("{}_others", label), bounded_cnt);
+        log_pair(&format!("{}_others", label), comma(bounded_cnt));
     }
 }
 
