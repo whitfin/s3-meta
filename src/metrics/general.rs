@@ -22,7 +22,7 @@ impl General {
     pub(super) fn new(prefix: &Option<String>) -> General {
         General {
             folder_set: HashSet::new(),
-            prefix_len: prefix.as_ref().map(|s| s.len()).unwrap_or(1) - 1,
+            prefix_len: prefix.as_ref().map(|s| s.len()).unwrap_or(0),
             start_time: SystemTime::now(),
             total_keys: 0,
             total_size: 0,
