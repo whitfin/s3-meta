@@ -96,9 +96,19 @@ mod tests {
     use super::MetaError;
     use rusoto_credential::CredentialsError;
     use rusoto_s3::ListObjectsV2Error;
+    use std::io::{Error, ErrorKind};
 
     #[test]
-    fn converting_rusoto_to_meta() {
+    fn converting_io_to_error() {
+        let message = "My fake access key failed message";
+        let io_errs = Error::new(ErrorKind::Other, message);
+        let convert = MetaError::from(io_errs);
+
+        assert_eq!(convert.0, message);
+    }
+
+    #[test]
+    fn converting_rusoto_to_error() {
         let message = "My fake access key failed message".to_string();
         let xml_err = format!(
             r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -114,5 +124,21 @@ mod tests {
         let converted = MetaError::from(lists_err);
 
         assert_eq!(converted.0, message);
+    }
+
+    #[test]
+    fn converting_string_to_error() {
+        let message = "My fake access key failed message".to_string();
+        let convert = MetaError::from(message.clone());
+
+        assert_eq!(convert.0, message);
+    }
+
+    #[test]
+    fn converting_str_to_error() {
+        let message = "My fake access key failed message";
+        let convert = MetaError::from(message);
+
+        assert_eq!(convert.0, message);
     }
 }
