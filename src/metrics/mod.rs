@@ -17,11 +17,6 @@ use self::modification::Modification;
 /// track metrics on objects stored in S3. Object instances will be
 /// fed through to `register` on each entry in S3.
 pub trait Metric {
-    /// Creates a new instance of this structure.
-    fn new() -> Self
-    where
-        Self: Sized;
-
     /// Registers an S3 object for statistics.
     fn register(&mut self, object: &Object);
 
@@ -30,9 +25,9 @@ pub trait Metric {
 }
 
 /// Returns a chain of `Metric` objects in deterministic order.
-pub fn chain() -> Vec<Box<Metric>> {
+pub fn chain(prefix: &Option<String>) -> Vec<Box<Metric>> {
     vec![
-        Box::new(General::new()),
+        Box::new(General::new(prefix)),
         Box::new(FileSize::new()),
         Box::new(Extensions::new()),
         Box::new(Modification::new()),

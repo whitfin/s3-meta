@@ -11,15 +11,18 @@ pub struct Extensions {
     extensions: HashMap<String, u64>,
 }
 
-/// Metric implementation.
-impl Metric for Extensions {
+/// Main implementation.
+impl Extensions {
     /// Constructs a new `Extensions` struct.
-    fn new() -> Extensions {
+    pub(super) fn new() -> Extensions {
         Extensions {
             extensions: HashMap::new(),
         }
     }
+}
 
+/// Metric implementation.
+impl Metric for Extensions {
     /// Registers an S3 `Object` with this metric struct.
     fn register(&mut self, object: &Object) {
         // grab the file extensions and increment

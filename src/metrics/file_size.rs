@@ -12,10 +12,10 @@ pub struct FileSize {
     smallest_file: Bounded<u64>,
 }
 
-/// Metric implementation.
-impl Metric for FileSize {
+/// Main implementation.
+impl FileSize {
     /// Constructs a new `FileSize` struct.
-    fn new() -> FileSize {
+    pub(super) fn new() -> FileSize {
         FileSize {
             total_keys: 0,
             total_space: 0,
@@ -23,7 +23,10 @@ impl Metric for FileSize {
             smallest_file: Bounded::new(0),
         }
     }
+}
 
+/// Metric implementation.
+impl Metric for FileSize {
     /// Registers an S3 `Object` with this metric struct.
     fn register(&mut self, object: &Object) {
         // pull various metadata

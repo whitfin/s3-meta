@@ -10,16 +10,19 @@ pub struct Modification {
     latest_file: Bounded<String>,
 }
 
-/// Metric implementation.
-impl Metric for Modification {
+/// Main implementation.
+impl Modification {
     /// Constructs a new `Modification` struct.
-    fn new() -> Modification {
+    pub(super) fn new() -> Modification {
         Modification {
             latest_file: Bounded::new("".into()),
             earliest_file: Bounded::new("".into()),
         }
     }
+}
 
+/// Metric implementation.
+impl Metric for Modification {
     /// Registers an S3 `Object` with this metric struct.
     fn register(&mut self, object: &Object) {
         ::bounded::apply(

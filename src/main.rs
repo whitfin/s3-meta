@@ -48,7 +48,7 @@ fn main() -> types::MetaResult<()> {
     );
 
     // create our set of metric meters
-    let mut chain = metrics::chain();
+    let mut chain = metrics::chain(&prefix);
 
     // iteration token
     let mut token = None;

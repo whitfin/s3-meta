@@ -10,31 +10,48 @@ use super::Metric;
 /// Container struct for general metrics tracked by S3.
 pub struct General {
     folder_set: HashSet<String>,
+    prefix_len: usize,
     start_time: SystemTime,
     total_keys: u64,
     total_size: u64,
 }
 
-/// Metric implementation.
-impl Metric for General {
+/// Main implementation.
+impl General {
     /// Constructs a new `General` struct.
-    fn new() -> General {
+    pub(super) fn new(prefix: &Option<String>) -> General {
         General {
             folder_set: HashSet::new(),
+            prefix_len: prefix.as_ref().map(|s| s.len()).unwrap_or(1) - 1,
             start_time: SystemTime::now(),
             total_keys: 0,
             total_size: 0,
         }
     }
+}
 
+/// Metric implementation.
+impl Metric for General {
     /// Registers an S3 `Object` with this metric struct.
     fn register(&mut self, object: &Object) {
+        // grab the key of the object
         let key = super::get_key(object);
 
+        // walk the ancestors, skipping the file name
         for dir in Path::new(&key).ancestors().skip(1) {
-            self.folder_set.insert(dir.to_string_lossy().into_owned());
+            let path = dir.to_string_lossy();
+
+            // skip anything above/or the root
+            if path.len() <= self.prefix_len {
+                continue;
+            }
+
+            // trim off the configured prefix
+            let trimmed = &path[self.prefix_len..];
+            self.folder_set.insert(trimmed.to_string());
         }
 
+        // increment counters
         self.total_keys += 1;
         self.total_size += super::get_size(object);
     }
