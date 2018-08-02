@@ -1,5 +1,5 @@
 # S3 Meta
-[![Unix Build Status](https://img.shields.io/travis/whitfin/s3-meta.svg?label=unix)](https://travis-ci.org/whitfin/s3-meta) [![Windows Build Status](https://img.shields.io/appveyor/ci/whitfin/s3-meta.svg?label=win)](https://ci.appveyor.com/project/whitfin/s3-meta)
+[![Crates.io](https://img.shields.io/crates/v/s3-meta.svg)](https://crates.io/crates/s3-meta) [![Unix Build Status](https://img.shields.io/travis/whitfin/s3-meta.svg?label=unix)](https://travis-ci.org/whitfin/s3-meta) [![Windows Build Status](https://img.shields.io/appveyor/ci/whitfin/s3-meta.svg?label=win)](https://ci.appveyor.com/project/whitfin/s3-meta)
 
 A simple tool to gather data about an S3 bucket (or subsection thereof). Designed to be simple, and (sort-of) shell consumable. Metadata will be added as it becomes available, and S3 interaction is controlled by [rusoto_s3](https://crates.io/crates/rusoto_s3).
 
