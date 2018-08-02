@@ -1,3 +1,10 @@
+//! Metadata gathering for S3 buckets and subsections.
+//!
+//! This tool should be used from a command line and can be used to output
+//! a report about an Amazon S3 bucket, or subsection thereof.
+//!
+//! Credentials must be provided via guidelines in the [AWS Documentation]
+//! (https://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html).
 extern crate humantime;
 extern crate pretty_bytes;
 extern crate quick_xml;
