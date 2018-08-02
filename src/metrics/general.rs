@@ -62,8 +62,8 @@ impl Metric for General {
 
         // log out the total time, total space, and total file count
         ::util::log_pair("total_time", humantime::format_duration(task_duration));
-        ::util::log_pair("total_space", ::util::convert_bytes(self.total_size));
         ::util::log_pair("total_files", self.total_keys);
         ::util::log_pair("total_folders", self.total_dirs);
+        ::util::log_pair("total_storage", ::util::convert_bytes(self.total_size));
     }
 }
