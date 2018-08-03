@@ -38,8 +38,6 @@ impl From<ListObjectsV2Error> for MetaError {
         // grab the raw conversion
         let msg = err.to_string();
 
-        println!("{}", msg);
-
         // XML, look for a message!
         if msg.starts_with("<?xml") {
             // create an XML reader and buffer
