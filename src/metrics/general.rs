@@ -10,7 +10,7 @@ use super::Metric;
 /// Container struct for general metrics tracked by S3.
 pub struct General {
     folder_set: HashSet<String>,
-    prefix_len: usize,
+    nest_count: usize,
     start_time: SystemTime,
     total_keys: u64,
     total_size: u64,
@@ -22,7 +22,10 @@ impl General {
     pub(super) fn new(prefix: &Option<String>) -> General {
         General {
             folder_set: HashSet::new(),
-            prefix_len: prefix.as_ref().map(|s| s.len()).unwrap_or(0),
+            nest_count: prefix
+                .as_ref()
+                .map(|s| s.matches("/").count() - 1)
+                .unwrap_or(0),
             start_time: SystemTime::now(),
             total_keys: 0,
             total_size: 0,
@@ -37,18 +40,25 @@ impl Metric for General {
         // grab the key of the object
         let key = super::get_key(object);
 
+        // count the number of prefix nests
+        let nest_count = key.match_indices("/")
+            .skip(self.nest_count)
+            .next()
+            .map(|(idx, _)| idx + 1)
+            .unwrap_or(0);
+
         // walk the ancestors, skipping the file name
-        for dir in Path::new(&key).ancestors().skip(1) {
+        for dir in Path::new(&key[nest_count..]).ancestors().skip(1) {
+            // convert to a string
             let path = dir.to_string_lossy();
 
-            // skip anything above/or the root
-            if path.len() <= self.prefix_len {
+            // skip empty dirs
+            if path.is_empty() {
                 continue;
             }
 
-            // trim off the configured prefix
-            let trimmed = &path[self.prefix_len..];
-            self.folder_set.insert(trimmed.to_string());
+            // store the path in the set
+            self.folder_set.insert(path.to_string());
         }
 
         // increment counters
