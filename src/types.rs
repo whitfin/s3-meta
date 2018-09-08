@@ -94,7 +94,7 @@ derive_from!(String);
 #[cfg(test)]
 mod tests {
     use super::MetaError;
-    use rusoto_credential::CredentialsError;
+    use rusoto_core::credential::CredentialsError;
     use rusoto_s3::ListObjectsV2Error;
     use std::io::{Error, ErrorKind};
 
