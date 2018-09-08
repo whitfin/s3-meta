@@ -1,6 +1,7 @@
 //! Types module for the main runtime, exposing error and result types.
 use quick_xml::events::Event;
 use quick_xml::Reader;
+use rusoto_core::request;
 use rusoto_s3::ListObjectsV2Error;
 use std::fmt::{self, Debug, Display, Formatter};
 use std::{io, time};
@@ -86,6 +87,7 @@ macro_rules! derive_from {
 // Easy derivations of derive_from.
 derive_from!(&'a str);
 derive_from!(io::Error);
+derive_from!(request::TlsError);
 derive_from!(time::SystemTimeError);
 derive_from!(String);
 

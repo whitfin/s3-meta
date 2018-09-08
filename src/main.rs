@@ -11,12 +11,10 @@ extern crate quick_xml;
 extern crate rusoto_core;
 extern crate rusoto_credential;
 extern crate rusoto_s3;
-extern crate tokio_core;
 
-use rusoto_core::{reactor::RequestDispatcher, region::Region};
+use rusoto_core::{region::Region, HttpClient};
 use rusoto_credential::ChainProvider;
 use rusoto_s3::{ListObjectsV2Request, S3, S3Client};
-use tokio_core::reactor::Core;
 
 mod bounded;
 mod metrics;
@@ -37,15 +35,13 @@ fn main() -> types::MetaResult<()> {
     let bucket = splitn.next().unwrap().to_string();
     let prefix = splitn.next().map(|s| s.to_string());
 
-    // asynchronous core for rusoto
-    let core = Core::new()?;
+    // create client options
+    let client = HttpClient::new()?;
+    let provider = ChainProvider::new();
+    let region = Region::default();
 
     // construct new S3 client
-    let s3 = S3Client::new(
-        RequestDispatcher::default(),
-        ChainProvider::new(&core.handle()),
-        Region::default(),
-    );
+    let s3 = S3Client::new_with(client, provider, region);
 
     // create our set of metric meters
     let mut chain = metrics::chain(&prefix);
@@ -63,7 +59,7 @@ fn main() -> types::MetaResult<()> {
         };
 
         // execute the request and await the response (blocking)
-        let response = s3.list_objects_v2(&request).sync()?;
+        let response = s3.list_objects_v2(request).sync()?;
 
         // check contents (although should always be there)
         if let Some(contents) = response.contents {

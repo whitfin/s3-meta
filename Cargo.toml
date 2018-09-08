@@ -14,14 +14,11 @@ appveyor = { repository = "whitfin/s3-meta" }
 travis-ci = { repository = "whitfin/s3-meta" }
 
 [dependencies]
-tokio-core = "0.1"
-
-# AWS/S3 libraries
-rusoto_core = "0.32"
-rusoto_credential = "0.11"
-rusoto_s3 = "0.32"
-
-# Formatting libraries
 humantime = "1.1"
 pretty-bytes = "0.2"
 quick-xml = "0.12"
+
+# AWS/S3 libraries
+rusoto_core = "0.34"
+rusoto_credential = "0.13"
+rusoto_s3 = "0.34"
