@@ -9,12 +9,11 @@ extern crate humantime;
 extern crate pretty_bytes;
 extern crate quick_xml;
 extern crate rusoto_core;
-extern crate rusoto_credential;
 extern crate rusoto_s3;
 
-use rusoto_core::{region::Region, HttpClient};
-use rusoto_credential::ChainProvider;
+use rusoto_core::{credential::ChainProvider, region::Region, HttpClient};
 use rusoto_s3::{ListObjectsV2Request, S3, S3Client};
+use std::time::Duration;
 
 mod bounded;
 mod metrics;
@@ -37,11 +36,14 @@ fn main() -> types::MetaResult<()> {
 
     // create client options
     let client = HttpClient::new()?;
-    let provider = ChainProvider::new();
     let region = Region::default();
 
+    // create provided with timeout
+    let mut chain = ChainProvider::new();
+    chain.set_timeout(Duration::from_millis(500));
+
     // construct new S3 client
-    let s3 = S3Client::new_with(client, provider, region);
+    let s3 = S3Client::new_with(client, chain, region);
 
     // create our set of metric meters
     let mut chain = metrics::chain(&prefix);

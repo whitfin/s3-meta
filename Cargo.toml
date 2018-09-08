@@ -20,5 +20,4 @@ quick-xml = "0.12"
 
 # AWS/S3 libraries
 rusoto_core = "0.34"
-rusoto_credential = "0.13"
 rusoto_s3 = "0.34"

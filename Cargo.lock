@@ -810,7 +810,6 @@ dependencies = [
  "pretty-bytes 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "quick-xml 0.12.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "rusoto_core 0.34.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "rusoto_credential 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rusoto_s3 0.34.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
