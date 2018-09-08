@@ -31,7 +31,7 @@ fn main() -> types::MetaResult<()> {
         .ok_or_else(|| "Bucket name not provided")?;
 
     // split the path up to a (bucket, prefix)
-    let mut splitn = root_paths.splitn(2, '/');
+    let mut splitn = root_paths.trim_left_matches("s3://").splitn(2, '/');
 
     // bucket is required, prefix is optional after `/`
     let bucket = splitn.next().unwrap().to_string();
