@@ -1,6 +1,8 @@
 # S3 Meta
 [![Crates.io](https://img.shields.io/crates/v/s3-meta.svg)](https://crates.io/crates/s3-meta) [![Build Status](https://img.shields.io/travis/whitfin/s3-meta.svg)](https://travis-ci.org/whitfin/s3-meta)
 
+**This tool has been migrated into [s3-utils](https://github.com/whitfin/s3-utils), please use that crate for future updates.**
+
 A simple tool to gather data about an S3 bucket (or subsection thereof). Designed to be simple, and (sort-of) shell consumable. Metadata will be added as it becomes available, and S3 interaction is controlled by [rusoto_s3](https://crates.io/crates/rusoto_s3).
 
 ## Installation
