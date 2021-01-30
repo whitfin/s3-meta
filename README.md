@@ -1,5 +1,6 @@
 # S3 Meta
-[![Crates.io](https://img.shields.io/crates/v/s3-meta.svg)](https://crates.io/crates/s3-meta) [![Build Status](https://img.shields.io/travis/whitfin/s3-meta.svg)](https://travis-ci.org/whitfin/s3-meta)
+[![Crates.io](https://img.shields.io/crates/v/s3-meta.svg)](https://crates.io/crates/s3-meta)
+[![Build Status](https://img.shields.io/github/workflow/status/whitfin/s3-meta/CI)](https://github.com/whitfin/s3-meta/actions)
 
 **This tool has been migrated into [s3-utils](https://github.com/whitfin/s3-utils), please use that crate for future updates.**
 
