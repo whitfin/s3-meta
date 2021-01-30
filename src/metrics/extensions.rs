@@ -27,7 +27,8 @@ impl Metric for Extensions {
     fn register(&mut self, object: &Object) {
         // grab the file extensions and increment
         if let Some(ext) = Path::new(super::get_key(object)).extension() {
-            *self.extensions
+            *self
+                .extensions
                 .entry(ext.to_string_lossy().into_owned())
                 .or_insert(0) += 1;
         }
@@ -40,7 +41,8 @@ impl Metric for Extensions {
         ::util::log_pair("unique_extensions", self.extensions.len());
 
         // find the most frequent extension
-        let prevalent_extension = self.extensions
+        let prevalent_extension = self
+            .extensions
             .iter()
             .max_by(|(_, left), (_, right)| left.cmp(right));
 
