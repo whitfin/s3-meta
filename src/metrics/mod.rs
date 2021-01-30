@@ -25,7 +25,7 @@ pub trait Metric {
 }
 
 /// Returns a chain of `Metric` objects in deterministic order.
-pub fn chain(prefix: &Option<String>) -> Vec<Box<Metric>> {
+pub fn chain(prefix: &Option<String>) -> Vec<Box<dyn Metric>> {
     vec![
         Box::new(General::new(prefix)),
         Box::new(FileSize::new()),

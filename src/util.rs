@@ -11,12 +11,12 @@ pub fn convert_bytes(bytes: u64) -> String {
 /// Logs out a bounded value, conditionally based on content.
 pub fn log_bound<L, T>(label: &str, bounded: &Bounded<T>, logger: L)
 where
-    L: FnOnce(T) -> (),
+    L: FnOnce(T),
     T: Clone,
 {
     let bounded_key = bounded.key().clone();
 
-    if let None = bounded_key {
+    if bounded_key.is_none() {
         return;
     }
 

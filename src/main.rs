@@ -12,7 +12,7 @@ extern crate rusoto_core;
 extern crate rusoto_s3;
 
 use rusoto_core::{credential::ChainProvider, region::Region, HttpClient};
-use rusoto_s3::{ListObjectsV2Request, S3, S3Client};
+use rusoto_s3::{ListObjectsV2Request, S3Client, S3};
 use std::time::Duration;
 
 mod bounded;
@@ -22,13 +22,10 @@ mod util;
 
 fn main() -> types::MetaResult<()> {
     // grab the root path of the S3 location to use
-    let root_paths = std::env::args()
-        .skip(1)
-        .next()
-        .ok_or_else(|| "Bucket name not provided")?;
+    let root_paths = std::env::args().nth(1).ok_or("Bucket name not provided")?;
 
     // split the path up to a (bucket, prefix)
-    let mut splitn = root_paths.trim_left_matches("s3://").splitn(2, '/');
+    let mut splitn = root_paths.trim_start_matches("s3://").splitn(2, '/');
 
     // bucket is required, prefix is optional after `/`
     let bucket = splitn.next().unwrap().to_string();
@@ -75,7 +72,7 @@ fn main() -> types::MetaResult<()> {
         }
 
         // break if there's no way to continue
-        if let None = response.next_continuation_token {
+        if response.next_continuation_token.is_none() {
             break;
         }
 

@@ -24,7 +24,7 @@ impl General {
             folder_set: HashSet::new(),
             nest_count: prefix
                 .as_ref()
-                .map(|s| s.matches("/").count() - 1)
+                .map(|s| s.matches('/').count() - 1)
                 .unwrap_or(0),
             start_time: SystemTime::now(),
             total_keys: 0,
@@ -41,9 +41,9 @@ impl Metric for General {
         let key = super::get_key(object);
 
         // count the number of prefix nests
-        let nest_count = key.match_indices("/")
-            .skip(self.nest_count)
-            .next()
+        let nest_count = key
+            .match_indices('/')
+            .nth(self.nest_count)
             .map(|(idx, _)| idx + 1)
             .unwrap_or(0);
 
